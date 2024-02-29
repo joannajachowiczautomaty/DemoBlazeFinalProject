@@ -167,6 +167,24 @@ class HomePage(BasePage):
         self.driver.find_element(*HomePageLocators.PURCHASE_BUTTON).click()
         self.driver.find_element(*HomePageLocators.SUCCESSFUL_ORDER_MODAL)
 
+    def create_order_without_card_number(self):
+        """
+        Verify that is possible to create order for selected product without adding card number
+        """
+        self.driver.find_element(*HomePageLocators.CART_TAB).click()
+        self.driver.find_element(*HomePageLocators.PLACE_ORDER_BUTTON).click()
+        self.driver.find_element(*HomePageLocators.PLACE_ORDER_MODAL)
+        wait = WebDriverWait(self.driver, 10)
+        self.driver.find_element(*HomePageLocators.NAME_ORDER_FIELD).send_keys(self.order_data.fake_name)
+        wait = WebDriverWait(self.driver, 10)
+        self.driver.find_element(*HomePageLocators.PURCHASE_BUTTON).click()
+        alert = Alert(self.driver)
+        alert_text = alert.text
+        expected_alert_text = "Please fill out Name and Creditcard."
+        assert alert_text == expected_alert_text, f"Unexpected alert text: {alert_text}"
+
+
+
 
 
 
